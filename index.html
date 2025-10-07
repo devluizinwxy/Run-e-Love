@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Super Aventura, Meu Bem!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="mario-world">
+        
+        <div class="character-image left">
+            <img src="inochi-left.png" alt="Sua Princesa e Mario"> 
+        </div>
+
+        <div id="pergunta-container">
+            <div id="coracao-subindo">❤️</div>
+            <p>Quer entrar nessa aventura comigo meu bem?</p>
+            <div id="botoes">
+                <button id="btnSim">Sim</button>
+                <button id="btnNao">Não</button>
+            </div>
+        </div>
+
+        <div id="game-container" class="escondido">
+            <div id="score">OBSTÁCULOS: 0/10</div>
+            <div id="mario"></div>
+            <div id="ground"></div>
+            </div>
+
+        <div id="mensagem-final" class="escondido">
+            <p id="msg-line1"></p>
+            <p id="msg-line2"></p>
+            <p id="msg-line3" class="instrucao"></p>
+        </div>
+
+        <div class="character-image right">
+            <img src="inochi-right.png" alt="Sua Princesa e Mario"> 
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

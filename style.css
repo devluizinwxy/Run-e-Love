@@ -1,0 +1,239 @@
+/* Estilo Global e Fundo Mario */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+}
+
+#mario-world {
+    background-image: url('mario-background.png'); 
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Arial Black', Gadget, sans-serif;
+    color: white;
+    position: relative; 
+}
+
+.escondido {
+    display: none !important;
+}
+
+/* Imagens Laterais */
+.character-image {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px; 
+    z-index: 5; 
+}
+
+.character-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+}
+
+.character-image.left { left: 20px; }
+.character-image.right { right: 20px; }
+
+
+/* Pergunta Principal */
+#pergunta-container {
+    background-color: rgba(0, 0, 0, 0.7); 
+    padding: 40px 60px;
+    border-radius: 15px;
+    border: 5px solid gold;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    position: relative; 
+    z-index: 10;
+}
+
+#pergunta-container p {
+    font-size: 2em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px #000;
+}
+
+/* Efeito do coração */
+#coracao-subindo {
+    font-size: 3em;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: flutuar 3s infinite ease-in-out;
+}
+@keyframes flutuar {
+    0% { transform: translate(-50%, 0); opacity: 1; }
+    50% { transform: translate(-50%, -10px); opacity: 0.8; }
+    100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+
+/* Estilo dos Botões Pixelados */
+#botoes button {
+    padding: 12px 30px;
+    margin: 0 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #4A2B0E; 
+    border: 3px solid #6B492B; 
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 4px 4px #4A2B0E; 
+    transition: transform 0.2s, box-shadow 0.2s; 
+}
+
+/* Efeito Hover e Crescer */
+#botoes button:hover {
+    transform: scale(1.05); 
+    box-shadow: 6px 6px #4A2B0E; 
+}
+
+/* Botão SIM (Grama) */
+#btnSim {
+    background: repeating-linear-gradient(
+        45deg,
+        #38761D, 
+        #38761D 10px,
+        #6AA84F 10px, 
+        #6AA84F 20px
+    );
+    border: 3px solid #144400; 
+    box-shadow: 4px 4px #144400;
+}
+#btnSim:hover { box-shadow: 6px 6px #144400; }
+
+
+/* Botão NÃO (Fogo/Perigo) */
+#btnNao {
+    background: repeating-linear-gradient(
+        45deg,
+        #C00000, 
+        #C00000 10px,
+        #FF5555 10px, 
+        #FF5555 20px
+    );
+    border: 3px solid #800000;
+    box-shadow: 4px 4px #800000;
+    
+    position: absolute; 
+    transition: none; 
+}
+#btnNao:hover { box-shadow: 6px 6px #800000; }
+
+
+/* ----------------------------------- */
+/* ESTILOS DO JOGO - MINI MARIO RUNNER */
+/* ----------------------------------- */
+#game-container {
+    width: 700px; 
+    height: 250px;
+    background-color: #70c5ce; 
+    border-bottom: 5px solid #4CAF50; 
+    overflow: hidden; 
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+#score {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5em;
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
+    z-index: 100;
+}
+
+#mario {
+    width: 50px;
+    height: 50px;
+    background-image: url('mario.png'); 
+    background-size: cover;
+    position: absolute;
+    bottom: 0; 
+    left: 50px;
+    transition: bottom 0.1s; 
+    z-index: 60;
+}
+
+/* Animação de pulo */
+.jump { animation: marioJump 0.6s linear; }
+@keyframes marioJump {
+    0% { bottom: 0; }
+    40% { bottom: 120px; } 
+    60% { bottom: 120px; }
+    100% { bottom: 0; }
+}
+
+/* Base dos Obstáculos (Cano) */
+.obstacle {
+    width: 40px;
+    height: 60px;
+    background-image: url('pipe.png'); 
+    background-size: cover;
+    position: absolute;
+    bottom: 0; 
+    right: -40px; 
+}
+
+/* NOVO: Tartaruga (Mais baixa e mais larga) */
+.turtle-obstacle {
+    width: 55px; 
+    height: 35px; 
+    background-image: url('turtle.png'); 
+    background-size: cover;
+}
+
+/* Bandeirinha de Vitória */
+#bandeirinha {
+    width: 60px;
+    height: 180px;
+    background-image: url('flag.png'); 
+    background-size: cover;
+    position: absolute;
+    bottom: 0;
+    right: -60px; 
+    z-index: 50;
+    transition: right 2s ease-out; 
+}
+
+
+/* Mensagem Final com Efeito Digitação */
+#mensagem-final { 
+    background-color: rgba(4, 118, 207, 0.9); 
+    padding: 50px;
+    border-radius: 15px;
+    border: 5px solid white;
+    box-shadow: 0 0 30px #00008b;
+    z-index: 20;
+    position: absolute; 
+    text-align: left;
+    white-space: nowrap; 
+    overflow: hidden; 
+}
+
+#mensagem-final p {
+    font-size: 1.8em;
+    margin: 15px 0;
+    border-right: .15em solid gold; 
+    animation: blink-caret .75s step-end infinite;
+}
+
+#mensagem-final p.complete {
+    border-right: none;
+}
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: gold }
+}
