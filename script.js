@@ -12,11 +12,23 @@ let obstaclesPassed = 0;
 const MAX_OBSTACLES = 10; 
 let gameSpeed = 5; 
 let obstacleGenerationTimeout;
-let isVictoryReached = false;
-let checkWinInterval;
+let distanceScore = 0; 
+let scoreInterval;     
 
+let highScores = {
+    distance: 0,
+    obstacles: 0
+};
 
-// --- 1. Lógica do Botão "Não" (Fuga total na tela) ---
+// --- FUNÇÃO DE RECORDE ---
+function loadHighScores() {
+    const savedScores = localStorage.getItem('marioHighScores');
+    if (savedScores) {
+        highScores = JSON.parse(savedScores);
+    }
+}
+
+// --- Lógica do Botão "Não" (Fuga) ---
 btnNao.addEventListener('mouseover', () => {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
@@ -32,11 +44,10 @@ btnNao.addEventListener('mouseover', () => {
 });
 
 
-// --- 2. Lógica do Botão "Sim" (Iniciar Jogo) ---
+// --- Lógica do Botão "Sim" (Inicia o Jogo) ---
 btnSim.addEventListener('click', () => {
     perguntaContainer.classList.add('escondido');
     
-    // Resetar o botão 'Não' e o estilo 'fixed'
     btnNao.style.position = 'absolute';
     btnNao.style.left = 'auto';
     btnNao.style.top = 'auto';
@@ -50,7 +61,6 @@ function jump() {
     if (!isJumping && gameStarted) {
         isJumping = true;
         mario.classList.add('jump');
-        // Tempo do pulo aumentado para 800ms (0.8s), deve coincidir com o CSS!
         setTimeout(() => {
             mario.classList.remove('jump');
             isJumping = false;
@@ -58,48 +68,71 @@ function jump() {
     }
 }
 
-// O comando para pular (Espaço/Seta para Cima)
+// Controles (Teclado e Toque na Tela)
 document.addEventListener('keydown', (event) => {
     if (event.code === 'Space' || event.code === 'ArrowUp') {
         event.preventDefault(); 
         jump();
     }
 });
-
-// NOVO: Comando para pular na TELA (Toque no celular)
 gameContainer.addEventListener('touchstart', (event) => {
     jump();
 });
 
 
-// --- Lógica do Jogo ---
+// --- FUNÇÃO DE PARTÍCULAS ---
+function spawnVictoryParticles() {
+    const numParticles = 30; 
+    const types = ['flag', 'heart'];
 
+    for (let i = 0; i < numParticles; i++) {
+        const particle = document.createElement('div');
+        
+        const type = types[Math.floor(Math.random() * types.length)]; 
+        particle.classList.add('victory-particle', type);
+
+        if (type === 'heart') {
+            particle.textContent = '❤️'; 
+        }
+
+        particle.style.left = `${Math.random() * 100}%`; 
+        
+        const delay = Math.random() * 2.5; 
+        particle.style.animationDelay = `${delay}s`;
+
+        particle.style.animationDuration = `${3 + Math.random() * 2}s`; 
+
+        document.body.appendChild(particle);
+
+        particle.addEventListener('animationend', () => {
+            particle.remove();
+        });
+    }
+}
+
+
+// --- Lógica do Jogo ---
 function generateObstacle() {
-    if (obstaclesPassed >= MAX_OBSTACLES && !isVictoryReached) {
-        placeFlag();
-        return;
+    if (obstaclesPassed >= MAX_OBSTACLES) {
+        clearTimeout(obstacleGenerationTimeout);
+        return; 
     }
     
-    // 1. Sorteio do tipo de obstáculo (50% cano, 50% tartaruga)
     const isPipe = Math.random() < 0.5;
-    
     const obstacle = document.createElement('div');
     let obstacleWidth;
     let obstacleHeight;
 
     if (isPipe) {
-        // Cano (Pipe)
         obstacle.classList.add('obstacle');
         obstacleWidth = 40; 
         obstacleHeight = 60; 
     } else { 
-        // Tartaruga (Turtle)
         obstacle.classList.add('obstacle', 'turtle-obstacle'); 
         obstacleWidth = 55; 
         obstacleHeight = 35; 
     }
     
-    // Ajuste de dimensões para mobile
     if (window.innerWidth <= 600) {
         if (isPipe) {
             obstacleWidth = 30; 
@@ -110,7 +143,6 @@ function generateObstacle() {
         }
     }
 
-    // Aplica as dimensões via style
     obstacle.style.width = obstacleWidth + 'px';
     obstacle.style.height = obstacleHeight + 'px';
     
@@ -124,14 +156,18 @@ function generateObstacle() {
         obstaclePosition -= gameSpeed; 
         obstacle.style.right = (700 - obstaclePosition) + 'px'; 
 
-        // Checar se o obstáculo saiu da tela
         if (obstaclePosition < -obstacleWidth) { 
             obstacle.remove();
-            obstaclesPassed++;
-            scoreDisplay.textContent = `OBSTÁCULOS: ${obstaclesPassed}/${MAX_OBSTACLES}`;
+            
+            if (obstaclesPassed < MAX_OBSTACLES) {
+                obstaclesPassed++;
+                updateScoreDisplay(); 
 
-            if (obstaclesPassed === MAX_OBSTACLES) {
-                clearTimeout(obstacleGenerationTimeout);
+                if (obstaclesPassed === MAX_OBSTACLES) {
+                    clearTimeout(obstacleGenerationTimeout);
+                    winGame(); 
+                    return; 
+                }
             }
             return; 
         } 
@@ -141,10 +177,8 @@ function generateObstacle() {
         const obstacleRect = obstacle.getBoundingClientRect();
 
         if (
-            // Colisão Horizontal
             marioRect.left < obstacleRect.right &&
             marioRect.right > obstacleRect.left &&
-            // Colisão Vertical
             marioRect.bottom > obstacleRect.top
         ) {
             gameOver();
@@ -161,49 +195,41 @@ function generateObstacle() {
     const maxObstacleGap = Math.max(1500, 3000 - obstaclesPassed * 100);
     const nextObstacleTime = Math.random() * (maxObstacleGap - minObstacleGap) + minObstacleGap;
     
-    if (obstaclesPassed < MAX_OBSTACLES) {
+    if (obstaclesPassed < MAX_OBSTACLES - 1) { 
         obstacleGenerationTimeout = setTimeout(generateObstacle, nextObstacleTime);
     }
 }
 
-function placeFlag() {
-    if (isVictoryReached) return;
-    isVictoryReached = true;
-    
-    const flag = document.createElement('div');
-    flag.id = 'bandeirinha';
-    gameContainer.appendChild(flag);
-    
-    setTimeout(() => {
-        flag.style.right = '50px'; 
-    }, 100);
-
-    // Verifica a colisão com a bandeira (Vitória)
-    checkWinInterval = setInterval(() => {
-        const marioRect = mario.getBoundingClientRect();
-        const flagRect = flag.getBoundingClientRect();
-
-        // Se o Mario tocar a bandeira
-        if (marioRect.left < flagRect.right && marioRect.right > flagRect.left) {
-            clearInterval(checkWinInterval);
-            winGame();
-        }
-    }, 50); 
+function updateScoreDisplay() {
+    scoreDisplay.innerHTML = `
+        OBSTÁCULOS: ${obstaclesPassed}/${MAX_OBSTACLES} <br>
+        <small>(Recorde: ${highScores.obstacles})</small> <br>
+        DISTÂNCIA: ${distanceScore}m <br>
+        <small>(Recorde: ${highScores.distance}m)</small>
+    `;
 }
+
 
 function startGame() {
     gameStarted = true;
     obstaclesPassed = 0;
-    isVictoryReached = false;
     gameSpeed = 5; 
-    scoreDisplay.textContent = `OBSTÁCULOS: 0/${MAX_OBSTACLES}`;
+    distanceScore = 0; 
     
-    // Limpar elementos e intervalos antigos
+    loadHighScores();
+    updateScoreDisplay();
+
+    // Inicia o contador de distância
+    clearInterval(scoreInterval); 
+    scoreInterval = setInterval(() => {
+        if (gameStarted) {
+            distanceScore += 1;
+            updateScoreDisplay();
+        }
+    }, 100); 
+
     document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
-    const flag = document.getElementById('bandeirinha');
-    if (flag) flag.remove();
     clearTimeout(obstacleGenerationTimeout);
-    clearInterval(checkWinInterval);
 
     generateObstacle();
 }
@@ -211,20 +237,43 @@ function startGame() {
 function gameOver() {
     gameStarted = false;
     clearTimeout(obstacleGenerationTimeout);
-    clearInterval(checkWinInterval);
-    alert("Oh não, Mario caiu! Tente novamente para resgatar sua princesa!");
-    startGame(); // Reinicia automaticamente
+    clearInterval(scoreInterval); 
+
+    // Salva novo recorde
+    if (distanceScore > highScores.distance) {
+        highScores.distance = distanceScore;
+    }
+    if (obstaclesPassed > highScores.obstacles) {
+        highScores.obstacles = obstaclesPassed;
+    }
+    localStorage.setItem('marioHighScores', JSON.stringify(highScores));
+
+    alert(`Oh não, Mario caiu! 
+    Distância: ${distanceScore}m (Recorde: ${highScores.distance}m)
+    Obstáculos: ${obstaclesPassed} (Recorde: ${highScores.obstacles})
+    
+    Tente novamente para resgatar sua princesa!
+    `);
+    startGame(); 
 }
 
 function winGame() {
     gameStarted = false;
     clearTimeout(obstacleGenerationTimeout);
-    clearInterval(checkWinInterval);
+    clearInterval(scoreInterval); 
     
-    // Remove o jogo
     gameContainer.classList.add('escondido');
     
-    // Mostra a mensagem e inicia a digitação
+    // Chama a chuva de partículas de vitória
+    spawnVictoryParticles(); 
+
+    // Atualiza o recorde
+    highScores.obstacles = MAX_OBSTACLES; 
+    if (distanceScore > highScores.distance) {
+        highScores.distance = distanceScore;
+    }
+    localStorage.setItem('marioHighScores', JSON.stringify(highScores));
+    
     mensagemFinal.classList.remove('escondido');
     typeMessages();
 }
@@ -264,3 +313,6 @@ function typeMessages(messageIndex = 0) {
         }
     }, 70); 
 }
+
+// Carrega os scores ao iniciar
+loadHighScores();
