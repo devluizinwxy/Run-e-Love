@@ -50,10 +50,11 @@ function jump() {
     if (!isJumping && gameStarted) {
         isJumping = true;
         mario.classList.add('jump');
+        // Tempo do pulo aumentado para 800ms (0.8s), deve coincidir com o CSS!
         setTimeout(() => {
             mario.classList.remove('jump');
             isJumping = false;
-        }, 600); 
+        }, 800); 
     }
 }
 
@@ -63,6 +64,11 @@ document.addEventListener('keydown', (event) => {
         event.preventDefault(); 
         jump();
     }
+});
+
+// NOVO: Comando para pular na TELA (Toque no celular)
+gameContainer.addEventListener('touchstart', (event) => {
+    jump();
 });
 
 
@@ -92,8 +98,19 @@ function generateObstacle() {
         obstacleWidth = 55; 
         obstacleHeight = 35; 
     }
+    
+    // Ajuste de dimensões para mobile
+    if (window.innerWidth <= 600) {
+        if (isPipe) {
+            obstacleWidth = 30; 
+            obstacleHeight = 45; 
+        } else {
+            obstacleWidth = 40; 
+            obstacleHeight = 25; 
+        }
+    }
 
-    // Aplica as dimensões via style (necessário para que a colisão seja precisa)
+    // Aplica as dimensões via style
     obstacle.style.width = obstacleWidth + 'px';
     obstacle.style.height = obstacleHeight + 'px';
     
@@ -119,7 +136,7 @@ function generateObstacle() {
             return; 
         } 
         
-        // Detecção de colisão (getBoundingClientRect é o mais confiável)
+        // Detecção de colisão
         const marioRect = mario.getBoundingClientRect();
         const obstacleRect = obstacle.getBoundingClientRect();
 
@@ -157,7 +174,6 @@ function placeFlag() {
     flag.id = 'bandeirinha';
     gameContainer.appendChild(flag);
     
-    // Posiciona a bandeira no final do percurso (50px da direita)
     setTimeout(() => {
         flag.style.right = '50px'; 
     }, 100);

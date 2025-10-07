@@ -167,12 +167,12 @@ body {
     z-index: 60;
 }
 
-/* Animação de pulo */
-.jump { animation: marioJump 0.6s linear; }
+/* Animação de pulo - MAIS ALTO E MAIS LONGO */
+.jump { animation: marioJump 0.8s linear; } 
 @keyframes marioJump {
     0% { bottom: 0; }
-    40% { bottom: 120px; } 
-    60% { bottom: 120px; }
+    40% { bottom: 160px; } /* Altura aumentada para 160px */
+    60% { bottom: 160px; }
     100% { bottom: 0; }
 }
 
@@ -236,4 +236,114 @@ body {
 @keyframes blink-caret {
     from, to { border-color: transparent }
     50% { border-color: gold }
+}
+
+
+/* ======================================= */
+/* MEDIA QUERIES PARA MOBILE (CELULARES)   */
+/* ======================================= */
+
+@media (max-width: 600px) {
+
+    /* ESTRUTURA GERAL */
+    #mario-world {
+        background-size: auto 100vh; 
+        background-position: center bottom;
+        background-repeat: repeat-x; 
+        align-items: flex-start; 
+        padding-top: 50px;
+    }
+
+    /* ESCONDE IMAGENS LATERAIS */
+    .character-image {
+        display: none; 
+    }
+
+    /* PERGUNTA E BOTÕES */
+    #pergunta-container {
+        width: 90%;
+        margin: 0 10px;
+        padding: 30px 20px;
+        box-sizing: border-box; 
+    }
+    
+    #pergunta-container p {
+        font-size: 1.5em; 
+        margin-bottom: 20px;
+    }
+
+    #botoes button {
+        font-size: 1em;
+        padding: 10px 20px;
+        margin: 5px; 
+    }
+    
+    #btnNao {
+        max-width: 40%;
+    }
+
+
+    /* O JOGO (Game Container) */
+    #game-container {
+        width: 95%; 
+        height: 180px; 
+        border-bottom-width: 3px;
+    }
+
+    /* Redimensiona o Mario e o Pulo */
+    #mario {
+        width: 40px;
+        height: 40px;
+        left: 20px;
+    }
+    
+    /* Ajusta a altura do pulo no CSS (Mobile) */
+    @keyframes marioJump {
+        0% { bottom: 0; }
+        40% { bottom: 100px; } /* Altura mobile aumentada para 100px */
+        60% { bottom: 100px; }
+        100% { bottom: 0; }
+    }
+    
+    /* Redimensiona os obstáculos */
+    .obstacle, .turtle-obstacle {
+        bottom: 0; 
+    }
+    
+    .obstacle { /* Cano */
+        width: 30px; 
+        height: 45px;
+    }
+    
+    .turtle-obstacle {
+        width: 40px;
+        height: 25px; 
+    }
+
+    /* Redimensiona a Bandeirinha */
+    #bandeirinha {
+        width: 50px;
+        height: 140px;
+        right: -50px;
+    }
+
+    /* Score */
+    #score {
+        font-size: 1em;
+        right: 5px;
+    }
+
+
+    /* MENSAGEM FINAL */
+    #mensagem-final {
+        width: 90%;
+        margin: 0 auto;
+        padding: 30px;
+        box-sizing: border-box;
+    }
+    
+    #mensagem-final p {
+        font-size: 1.2em; 
+    }
+
 }
