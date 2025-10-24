@@ -1,59 +1,62 @@
-Run & Love
+🎮 Run & Love
 
 Mini-jogo interativo de convite romântico
 
-Descrição
+Run & Love é um mini-jogo divertido feito em HTML, CSS e JavaScript. O jogador ajuda o personagem principal a superar obstáculos e alcançar uma mensagem especial para sua amada, de maneira interativa e única.
 
-Run & Love é um mini-jogo em HTML, CSS e JavaScript. O objetivo é convidar a amada para sair de forma divertida e interativa. O jogador controla o personagem principal que precisa superar obstáculos até alcançar a mensagem final personalizada.
+✨ Funcionalidades
 
-Funcionalidades
+Botões interativos:
 
-Botões interativos (Sim inicia o jogo, Não foge do cursor).
+Sim inicia o jogo
 
-Mini-jogo estilo runner com pulo de obstáculos.
+Não foge do cursor, criando humor e desafio
 
-Contagem de obstáculos e distância percorrida.
+Mini-jogo runner com pulo de obstáculos
 
-Recordes salvos no localStorage.
+Contador de obstáculos e distância percorrida
 
-Partículas de vitória (corações e bandeiras).
+Recordes salvos no localStorage
 
-Efeito de digitação para mensagens finais.
+Partículas de vitória (corações e bandeiras)
 
-Layout responsivo para desktop e mobile.
+Efeito de digitação para mensagens finais
 
-Tecnologias
+Layout responsivo para desktop e mobile
 
-HTML5
+🛠 Tecnologias
 
-CSS3 (animações, efeitos e responsividade)
+HTML5 – Estrutura do site e elementos do jogo
 
-JavaScript (lógica, interações e detecção de colisão)
+CSS3 – Estilo, animações, partículas e responsividade
 
-Como Jogar
+JavaScript – Lógica do jogo, interações e detecção de colisões
 
-Abra index.html no navegador.
+🎮 Como Jogar
 
-Clique em Sim para iniciar.
+Abra index.html no navegador
 
-Pule os obstáculos com Espaço ou seta para cima.
+Clique em Sim para começar a aventura
 
-Alcance o final para ver a mensagem especial.
+Pule os obstáculos usando Espaço ou seta para cima
 
-Estrutura do Projeto
+Alcance o final para desbloquear a mensagem especial
+
+📂 Estrutura do Projeto
 RunAndLove/
 │
-├── index.html
-├── style.css
-├── script.js
-├── mario.png
-├── mario-background.png
-├── inochi-left.png
-├── inochi-right.png
-├── pipe.png
-├── turtle.png
-└── flag.png
-Mensagem Final
+├── index.html           # Estrutura principal do mini-jogo
+├── style.css            # Estilos e animações
+├── script.js            # Lógica do jogo e interações
+├── mario.png            # Personagem principal
+├── mario-background.png # Fundo do jogo
+├── inochi-left.png      # Imagem lateral esquerda
+├── inochi-right.png     # Imagem lateral direita
+├── pipe.png             # Obstáculo: cano
+├── turtle.png           # Obstáculo: tartaruga
+└── flag.png             # Bandeira de final de fase
+
+💌 Mensagem Final
 
 "Parabéns, minha heroína!"
 
@@ -61,10 +64,7 @@ Mensagem Final
 
 "Venha para cá amanhã assistir um filme comigo!"
 
-Autor
+👨‍💻 Autor
 
 Luís de Jesus Fernandes
-Desenvolvedor Web / Criador do Run & Love
-Pule os obstáculos com Espaço ou seta para cima.
-
-Alcance o final para ver a mensagem especial.
+Desenvolvedor Web | Criador do Run & Love
