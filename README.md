@@ -67,4 +67,4 @@ RunAndLove/
 👨‍💻 Autor
 
 Luís de Jesus Fernandes
-Desenvolvedor Web | Criador do Run & Love
+Desenvolvedor fullStack | Criador do Run & Love
